@@ -12,16 +12,57 @@ namespace MyFirstGame
     {
         public DemoGame() : base(new Components.Vector2(512, 512), "Novum") { }
         Shape2D player;
-        private float accelerationX = 0;
-        private float accelerationY = 0;
+        private Vector2 acceleration = new Vector2(0,0);
         private bool left;
         private bool right;
         private bool up;
         private bool down;
         private float moveUnit = 2f;
         private float accelerationUnit = 0.2f;
-        private float speedX = 0;
-        private float speedY = 0;
+        private Vector2 speed = new Vector2(0,0);
+        private Vector2 centerPlayerPos = new Vector2 { X = 0, Y = 0 };
+        private List<Shape2D> holesList =new List<Shape2D>();
+        Random r = new Random();
+
+        private Shape2D CreateHole()
+        { 
+            int index = holesList.Count;
+            int rX = r.Next(100, 1000);
+            int rY = r.Next(100, 1000);
+            Shape2D hole = new Shape2D(new Vector2(rX, rY), new Vector2(100, 100), $"{index} hole");
+            holesList.Add(hole);
+            return hole;
+        }
+
+        public void HoleCreator(int amount)
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                CreateHole();
+            }
+        }
+
+        public float GetDisstanceBetween(Vector2 vector1, Vector2 vector2)
+        {
+
+            return (float)Math.Sqrt(Math.Pow((vector1.X-vector2.X),2)+ Math.Pow((vector1.Y - vector2.Y), 2));
+        }
+
+
+        public bool HitHole()
+        {
+            foreach (Shape2D hole in holesList)
+            {
+                Vector2 holeCenter = new Vector2(hole.Position.X+(hole.Scale.X/2),hole.Position.Y+(hole.Scale.Y/2));
+                if (GetDisstanceBetween(holeCenter, player.Position) <= (player.Scale.X+hole.Scale.X)/2)
+                { 
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
 
         public override void OnDraw()
         {
@@ -31,7 +72,9 @@ namespace MyFirstGame
         public override void OnLoad()
         {
             player = new Shape2D(new Vector2(10,10), new Vector2(10,10), "test");
-
+            centerPlayerPos.X = player.Position.X+(player.Scale.X/2);
+            centerPlayerPos.Y = player.Position.Y+(player.Scale.Y/2);
+            HoleCreator(4);
         }
 
         
@@ -40,49 +83,53 @@ namespace MyFirstGame
             if (player != null)
             {
                 //constans acceleration  "might not working if you cross the border!"
-                player.Position.Y += speedY;
-                player.Position.X += speedX;
-                speedX = moveUnit * accelerationX;
-                speedY = moveUnit * accelerationY;
-                if (accelerationX > 0)
+                player.Position.Y += speed.Y;
+                player.Position.X += speed.X;
+                speed.X = moveUnit * acceleration.X;
+                speed.Y = moveUnit * acceleration.Y;
+                if (acceleration.X > 0)
                 {
-                    accelerationX -= 0.1f;
+                    acceleration.X -= 0.1f;
                 }
-                if (accelerationY > 0)
+                if (acceleration.Y > 0)
                 {
-                    accelerationY -= 0.1f;
+                    acceleration.Y -= 0.1f;
                 }
-                if (accelerationX < 0)
+                if (acceleration.X < 0)
                 {
-                    accelerationX += 0.1f;
+                    acceleration.X += 0.1f;
                 }
-                if (accelerationY < 0)
+                if (acceleration.Y < 0)
                 {
-                    accelerationY += 0.1f;
+                    acceleration.Y += 0.1f;
                 }
                 //
 
                 //movement
                 if (up)
                 {
-                    accelerationY -= accelerationUnit;
+                    acceleration.Y -= accelerationUnit;
                     
                 }
                 if (down)
                 {
-                    accelerationY += accelerationUnit;
+                    acceleration.Y += accelerationUnit;
                 }
                 if (right)
                 {
-                    accelerationX += accelerationUnit;
+                    acceleration.X += accelerationUnit;
                 }
                 if (left)
                 {
-                    accelerationX -= accelerationUnit;
+                    acceleration.X -= accelerationUnit;
                 }
                 //
 
-
+                if (HitHole())
+                { 
+                    player.DestroyObj();
+                    player = null;
+                }
 
             }
            

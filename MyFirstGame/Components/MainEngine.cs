@@ -98,11 +98,15 @@ namespace MyFirstGame.Components
         {
             Graphics g = e.Graphics;
             g.Clear (Color.Gray);
+            g.FillRectangle(new SolidBrush(Color.Red), shape2Ds[0].Position.X, shape2Ds[0].Position.Y, shape2Ds[0].Scale.X, shape2Ds[0].Scale.Y);
 
             foreach (Shape2D shape in shape2Ds)
             {
-                g.FillRectangle(new SolidBrush(Color.Red),shape.Position.X,shape.Position.Y,shape.Scale.X,shape.Scale.Y);
+                if (shape != shape2Ds[0])
+                g.FillEllipse(new SolidBrush(Color.Blue), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
             }
+
+
 
         }
 
