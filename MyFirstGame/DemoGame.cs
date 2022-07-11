@@ -66,10 +66,12 @@ namespace MyFirstGame
 
         public void HoleCreator(int amount)
         {
+            Logger.Warning("GAME LOADING...");
             for (int i = 0; i < amount; i++)
             {
                 CreateHole();
             }
+            Logger.Info("GAME LOADED!");
         }
 
         public float GetDisstanceBetween(Vector2 vector1, Vector2 vector2)
@@ -108,7 +110,6 @@ namespace MyFirstGame
 
 
             HoleCreator(100);
-            Logger.Info($"Hole 1 posX: {holesList[0].Position.X} player posY: {holesList[0].Position.Y}");
         }
 
         
@@ -158,7 +159,6 @@ namespace MyFirstGame
                     acceleration.X -= accelerationUnit;
                 }
                 //
-                Logger.Info($"Player posX: {player.Position.X} player posY: {player.Position.Y}");
 
 
                 if (HitHole())

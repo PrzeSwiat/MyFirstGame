@@ -17,7 +17,7 @@ namespace MyFirstGame.Components
             this.Position = position;
             this.Scale = scale;
             this.Tag = tag;
-            Logger.Info($"[Shape2D] {tag} registered successfully ");
+            //Logger.Info($"[Shape2D] {tag} registered successfully ");
             MainEngine.RegisterShape(this);
         }
 
