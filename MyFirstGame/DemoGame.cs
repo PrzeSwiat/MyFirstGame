@@ -36,9 +36,26 @@ namespace MyFirstGame
                 
                 if (GetDisstanceBetween(new Vector2(rX,rY),player.Position)>=250)
                 {
-                    hole = new Shape2D(new Vector2(rX, rY), new Vector2(100, 100), $"{index} hole");
-                    holesList.Add(hole);
-                    check = true;
+                    if (holesList.Count() > 0)
+                    {
+                        foreach (Shape2D hole2 in holesList)
+                        {
+                            Vector2 holeCenter = new Vector2(hole2.Position.X + (hole2.Scale.X / 2), hole2.Position.Y + (hole2.Scale.Y / 2));
+
+                            if (GetDisstanceBetween(holeCenter, new Vector2(rX + 100, rY + 100)) > 200)
+                            {
+                                hole = new Shape2D(new Vector2(rX, rY), new Vector2(100, 100), $"{index} hole");
+                                check = true;
+                            }
+                        }
+                        holesList.Add(hole);
+                    }
+                    else 
+                    {
+                        hole = new Shape2D(new Vector2(rX, rY), new Vector2(100, 100), $"{index} hole");
+                        holesList.Add(hole);
+                        check = true;
+                    }
                 
                 }
                     

@@ -108,22 +108,27 @@ namespace MyFirstGame.Components
             Graphics g = e.Graphics;
             g.Clear (Color.Gray);
             g.TranslateTransform(-CameraPos.X+(Window.Width/2), -CameraPos.Y+(Window.Height/2));
-            foreach (Shape2D shape in shape2Ds)
-            {
-                
-                if (shape.Tag == "Player") 
+            try {
+                foreach (Shape2D shape in shape2Ds)
                 {
-                    CameraPos.X = shape.Position.X;
-                    CameraPos.Y = shape.Position.Y;
-                    g.FillRectangle(new SolidBrush(Color.Red), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
-                  
-                }
-                else
-                {
-                 g.FillEllipse(new SolidBrush(Color.Black), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
-                 
-                }
 
+                    if (shape.Tag == "Player")
+                    {
+                        CameraPos.X = shape.Position.X;
+                        CameraPos.Y = shape.Position.Y;
+                        g.FillRectangle(new SolidBrush(Color.Red), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
+
+                    }
+                    else
+                    {
+                        g.FillEllipse(new SolidBrush(Color.Black), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
+
+                    }
+
+                }
+            } catch
+            {
+                Logger.Warning("[MainEngine] - Player removed from board");
             }
             
 

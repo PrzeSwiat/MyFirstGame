@@ -23,7 +23,7 @@ namespace MyFirstGame.Components
         public static void Warning(string msg)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"[WARR]{msg}");
+            Console.WriteLine($"[WARN]{msg}");
             Console.ForegroundColor = ConsoleColor.White;
         }
         public static void Error(string msg)
