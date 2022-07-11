@@ -23,10 +23,18 @@ namespace MyFirstGame.Components
         public string title = "Novum";
         private Canvas Window = null;
         private Thread MainThread = null;
-
+        private Vector2 CameraPos = Vector2.Zero();
 
         private static List<Shape2D> shape2Ds = new List<Shape2D>();
 
+        public float GetWindowX()
+        {
+            return Window.Width;
+        }
+        public float GetWindowY()
+        {
+            return Window.Height;
+        }
 
         protected MainEngine(Vector2 screenSize, string title)
         {
@@ -90,6 +98,7 @@ namespace MyFirstGame.Components
                     MainThread.Abort();
                 }
 
+
             }
 
         }
@@ -98,13 +107,27 @@ namespace MyFirstGame.Components
         {
             Graphics g = e.Graphics;
             g.Clear (Color.Gray);
-            g.FillRectangle(new SolidBrush(Color.Red), shape2Ds[0].Position.X, shape2Ds[0].Position.Y, shape2Ds[0].Scale.X, shape2Ds[0].Scale.Y);
-
+            g.TranslateTransform(-CameraPos.X+(Window.Width/2), -CameraPos.Y+(Window.Height/2));
             foreach (Shape2D shape in shape2Ds)
             {
-                if (shape != shape2Ds[0])
-                g.FillEllipse(new SolidBrush(Color.Blue), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
+                
+                if (shape.Tag == "Player") 
+                {
+                    CameraPos.X = shape.Position.X;
+                    CameraPos.Y = shape.Position.Y;
+                    g.FillRectangle(new SolidBrush(Color.Red), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
+                  
+                }
+                else
+                {
+                 g.FillEllipse(new SolidBrush(Color.Black), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
+                 
+                }
+
             }
+            
+
+
 
 
 

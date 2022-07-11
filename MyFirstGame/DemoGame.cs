@@ -27,8 +27,8 @@ namespace MyFirstGame
         private Shape2D CreateHole()
         { 
             int index = holesList.Count;
-            int rX = r.Next(100, 1000);
-            int rY = r.Next(100, 1000);
+            int rX = r.Next(50, 1000);
+            int rY = r.Next(50, 1000);
             Shape2D hole = new Shape2D(new Vector2(rX, rY), new Vector2(100, 100), $"{index} hole");
             holesList.Add(hole);
             return hole;
@@ -71,10 +71,11 @@ namespace MyFirstGame
 
         public override void OnLoad()
         {
-            player = new Shape2D(new Vector2(10,10), new Vector2(10,10), "test");
+            player = new Shape2D(new Vector2(0,0), new Vector2(10,10), "Player");
             centerPlayerPos.X = player.Position.X+(player.Scale.X/2);
             centerPlayerPos.Y = player.Position.Y+(player.Scale.Y/2);
-            HoleCreator(4);
+            HoleCreator(15);
+            Logger.Info($"Hole 1 posX: {holesList[0].Position.X} player posY: {holesList[0].Position.Y}");
         }
 
         
@@ -124,6 +125,8 @@ namespace MyFirstGame
                     acceleration.X -= accelerationUnit;
                 }
                 //
+                Logger.Info($"Player posX: {player.Position.X} player posY: {player.Position.Y}");
+
 
                 if (HitHole())
                 { 
