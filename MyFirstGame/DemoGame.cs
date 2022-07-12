@@ -11,7 +11,8 @@ namespace MyFirstGame
     class DemoGame: Components.MainEngine
     {
         public DemoGame() : base(new Components.Vector2(512, 512), "Novum") { }
-        Shape2D player;
+        private Shape2D player;
+        private Shape2D myCoursor;
         private Vector2 acceleration = new Vector2(0,0);
         private bool left;
         private bool right;
@@ -64,6 +65,7 @@ namespace MyFirstGame
             return hole;
         }
 
+
         public void HoleCreator(int amount)
         {
             Logger.Warning("GAME LOADING...");
@@ -86,7 +88,7 @@ namespace MyFirstGame
             foreach (Shape2D hole in holesList)
             {
                 Vector2 holeCenter = new Vector2(hole.Position.X+(hole.Scale.X/2),hole.Position.Y+(hole.Scale.Y/2));
-                if (GetDisstanceBetween(holeCenter, player.Position) <= (player.Scale.X+hole.Scale.X)/2)
+                if (GetDisstanceBetween(holeCenter, centerPlayerPos) <= (player.Scale.X+hole.Scale.X)/2)
                 { 
                     return true;
                 }
@@ -103,12 +105,10 @@ namespace MyFirstGame
 
         public override void OnLoad()
         {
-            player = new Shape2D(new Vector2(0,0), new Vector2(10,10), "Player");
-            centerPlayerPos.X = player.Position.X+(player.Scale.X/2);
-            centerPlayerPos.Y = player.Position.Y+(player.Scale.Y/2);
-
-
-
+            //Creation of player
+            player = new Shape2D(new Vector2(0,0), new Vector2(20,50), "Player");
+            myCoursor = new Shape2D(new Vector2(0, 0), new Vector2(5, 5), "myCursor");
+           //
             HoleCreator(100);
         }
 
@@ -117,9 +117,15 @@ namespace MyFirstGame
         {
             if (player != null)
             {
+                myCoursor.Position.X = (Cursor.Position.X+player.Position.X)-GetWindowX()/2;
+                myCoursor.Position.Y = ((Cursor.Position.Y+player.Position.Y)-GetWindowY()/2)-30;
+
+
                 //constans acceleration  "might not working if you cross the border!"
                 player.Position.Y += speed.Y;
                 player.Position.X += speed.X;
+                centerPlayerPos.X = player.Position.X + (player.Scale.X / 2);
+                centerPlayerPos.Y = player.Position.Y + (player.Scale.Y / 2);
                 speed.X = moveUnit * acceleration.X;
                 speed.Y = moveUnit * acceleration.Y;
                 if (acceleration.X > 0)
@@ -212,5 +218,7 @@ namespace MyFirstGame
                 left = false;
             }
         }
+
+        
     }
 }

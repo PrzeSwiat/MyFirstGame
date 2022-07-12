@@ -14,6 +14,7 @@ namespace MyFirstGame.Components
         public Canvas()
         {
             this.DoubleBuffered = true;
+            
         }
     
     }
@@ -24,8 +25,8 @@ namespace MyFirstGame.Components
         private Canvas Window = null;
         private Thread MainThread = null;
         private Vector2 CameraPos = Vector2.Zero();
-
         private static List<Shape2D> shape2Ds = new List<Shape2D>();
+        private Vector2 MousePos = Vector2.Zero();
 
         public float GetWindowX()
         {
@@ -48,13 +49,19 @@ namespace MyFirstGame.Components
             Window.Paint += Window_Paint;
             Window.KeyDown += Window_KeyDown;
             Window.KeyUp += Window_KeyUp;
-            
 
             MainThread = new Thread(GameLoop);
             MainThread.Start(); 
 
             Application.Run(Window);
         }
+
+
+        public Vector2 GetMousePos()
+        {
+            return MousePos;
+        }
+
 
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
@@ -90,6 +97,8 @@ namespace MyFirstGame.Components
 
                     Window.BeginInvoke((MethodInvoker)delegate { Window.Refresh(); });
                     OnUpdate();
+                    MousePos.X = Cursor.Position.X;
+                    MousePos.Y = Cursor.Position.Y;
                     Thread.Sleep(5);
                 }
                 catch 
@@ -108,7 +117,8 @@ namespace MyFirstGame.Components
             Graphics g = e.Graphics;
             g.Clear (Color.Gray);
             g.TranslateTransform(-CameraPos.X+(Window.Width/2), -CameraPos.Y+(Window.Height/2));
-            try {
+
+           try {
                 foreach (Shape2D shape in shape2Ds)
                 {
 
@@ -143,5 +153,6 @@ namespace MyFirstGame.Components
         public abstract void OnDraw();
         public abstract void GetKeyDown(KeyEventArgs e);
         public abstract void GetKeyUp(KeyEventArgs e);
+
     }
 }
