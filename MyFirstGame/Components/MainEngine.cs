@@ -26,7 +26,9 @@ namespace MyFirstGame.Components
         private Thread MainThread = null;
         private Vector2 CameraPos = Vector2.Zero();
         private static List<Shape2D> shape2Ds = new List<Shape2D>();
+        private static List<Strite2D> strite2Ds = new List<Strite2D>();
         private Vector2 MousePos = Vector2.Zero();
+
 
         public float GetWindowX()
         {
@@ -84,6 +86,16 @@ namespace MyFirstGame.Components
             shape2Ds.Remove(shape);
             
         }
+        public static void RegisterStrite(Strite2D shape)
+        {
+            strite2Ds.Add(shape);
+        }
+
+        public static void UnregisterStrite(Strite2D shape)
+        {
+            strite2Ds.Remove(shape);
+
+        }
 
         void GameLoop() 
         {
@@ -119,9 +131,18 @@ namespace MyFirstGame.Components
             g.TranslateTransform(-CameraPos.X+(Window.Width/2), -CameraPos.Y+(Window.Height/2));
 
            try {
+                foreach (Strite2D strite in strite2Ds)
+                {
+                    string name = strite.Tag;
+                    int found = name.IndexOf(" ");
+                    if (name.Substring(found + 1) == "jet")
+                    {
+                        g.DrawImage(strite.Strite, strite.Position.X, strite.Position.Y, strite.Scale.X, strite.Scale.Y);
+                    }
+                }
                 foreach (Shape2D shape in shape2Ds)
                 {
-
+                    
                     if (shape.Tag == "Player")
                     {
                         CameraPos.X = shape.Position.X;
@@ -129,13 +150,16 @@ namespace MyFirstGame.Components
                         g.FillRectangle(new SolidBrush(Color.Red), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
 
                     }
+                    
                     else
                     {
                         g.FillEllipse(new SolidBrush(Color.Black), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
 
                     }
 
+
                 }
+                
             } catch
             {
                 Logger.Warning("[MainEngine] - Player removed from board");

@@ -13,6 +13,7 @@ namespace MyFirstGame
         public DemoGame() : base(new Components.Vector2(512, 512), "Novum") { }
         private Shape2D player;
         private Shape2D myCoursor;
+
         private Vector2 acceleration = new Vector2(0,0);
         private bool left;
         private bool right;
@@ -23,7 +24,50 @@ namespace MyFirstGame
         private Vector2 speed = new Vector2(0,0);
         private Vector2 centerPlayerPos = new Vector2 { X = 0, Y = 0 };
         private List<Shape2D> holesList =new List<Shape2D>();
+        private List<Strite2D> jetsList = new List<Strite2D>();
         Random r = new Random();
+
+        private Strite2D CreateJet()
+        {
+            bool check = false;
+            Strite2D jet = null;
+            while (!check)
+            {
+                int index = jetsList.Count;
+                int rX = r.Next(-5000, 5000);
+                int rY = r.Next(-5000, 5000);
+
+                if (GetDisstanceBetween(new Vector2(rX, rY), player.Position) >= 50)
+                {
+                    if (jetsList.Count() > 0)
+                    {
+                        foreach (Strite2D jet2 in jetsList)
+                        {
+
+                            if (GetDisstanceBetween(new Vector2(jet2.Position.X,jet2.Position.Y), new Vector2(rX, rY)) > 10)
+                            {
+                                jet = new Strite2D(new Vector2(rX, rY), new Vector2(20, 10), "/Hookers/Jet", $"{index} jet");
+                                check = true;
+                            }
+                        }
+                        jetsList.Add(jet);
+                    }
+                    else
+                    {
+                        jet = new Strite2D(new Vector2(rX, rY), new Vector2(20, 10), "/Hookers/Jet", $"{index} jet");
+                        jetsList.Add(jet);
+                        check = true;
+                    }
+
+                }
+
+
+            }
+            return jet;
+            
+        }
+
+        
 
         private Shape2D CreateHole()
         {
@@ -68,12 +112,21 @@ namespace MyFirstGame
 
         public void HoleCreator(int amount)
         {
-            Logger.Warning("GAME LOADING...");
+            Logger.Warning("HOLES LOADING...");
             for (int i = 0; i < amount; i++)
             {
                 CreateHole();
             }
-            Logger.Info("GAME LOADED!");
+            Logger.Info("HOLES LOADED!");
+        }
+        public void JetCreator(int amount)
+        {
+            Logger.Warning("JETS LOADING...");
+            for (int i = 0; i < amount; i++)
+            {
+                CreateJet();
+            }
+            Logger.Info("JETS LOADED!");
         }
 
         public float GetDisstanceBetween(Vector2 vector1, Vector2 vector2)
@@ -108,8 +161,11 @@ namespace MyFirstGame
             //Creation of player
             player = new Shape2D(new Vector2(0,0), new Vector2(20,50), "Player");
             myCoursor = new Shape2D(new Vector2(0, 0), new Vector2(5, 5), "myCursor");
+             
+
            //
             HoleCreator(100);
+            JetCreator(100);
         }
 
         
