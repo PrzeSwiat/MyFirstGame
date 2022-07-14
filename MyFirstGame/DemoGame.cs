@@ -23,9 +23,12 @@ namespace MyFirstGame
         private float accelerationUnit = 0.2f;
         private Vector2 speed = new Vector2(0,0);
         private Vector2 centerPlayerPos = new Vector2 { X = 0, Y = 0 };
+        private List<Vector2> havens = new List<Vector2>();
         private List<Shape2D> holesList =new List<Shape2D>();
         private List<Strite2D> jetsList = new List<Strite2D>();
         Random r = new Random();
+
+
 
         private Strite2D CreateJet()
         {
@@ -34,8 +37,8 @@ namespace MyFirstGame
             while (!check)
             {
                 int index = jetsList.Count;
-                int rX = r.Next(-5000, 5000);
-                int rY = r.Next(-5000, 5000);
+                int rX = r.Next(-100, 100);
+                int rY = r.Next(-100, 100);
 
                 if (GetDisstanceBetween(new Vector2(rX, rY), player.Position) >= 50)
                 {
@@ -159,13 +162,56 @@ namespace MyFirstGame
         public override void OnLoad()
         {
             //Creation of player
-            player = new Shape2D(new Vector2(0,0), new Vector2(20,50), "Player");
+            player = new Shape2D(new Vector2(0,0), new Vector2(20,40), "Player");
             myCoursor = new Shape2D(new Vector2(0, 0), new Vector2(5, 5), "myCursor");
-             
 
            //
             HoleCreator(100);
-            JetCreator(100);
+            JetCreator(3);
+
+            int hookCounterX = 0;
+            int hookCounterY = 0;
+            int hookPos = -10;
+
+           
+           if (player.Scale.X % 20 == 0 && player.Scale.Y % 20==0)
+            {
+                hookCounterX = (int) player.Scale.X / 20;
+                hookCounterY = (int) player.Scale.Y / 20;
+                
+               for(int i=0; i<hookCounterX; i++)
+                {
+                    Vector2 hook = new Vector2(hookPos + 20, 0);
+                    Vector2 hook2 = new Vector2(hookPos + 20, player.Scale.Y);
+                    hookPos = hookPos + 20;
+                    havens.Add(hook);
+                    havens.Add(hook2);
+                }
+                hookPos = -10;
+                for (int i = 0; i < hookCounterY; i++)
+                {
+                    Vector2 hook = new Vector2(0, hookPos + 20);
+                    Vector2 hook2 = new Vector2(player.Scale.X,hookPos+20);
+                    hookPos = hookPos + 20;
+                    havens.Add(hook);
+                    havens.Add(hook2);
+                }
+            }
+           else
+            {
+              Logger.Error($"[DemoGame] - {player.Tag} size must be divisible by 20");
+            }
+
+            
+
+
+            foreach (Vector2 hook in havens)
+            {
+                Logger.Info($"All hooks X: {hook.X}, Y:{hook.Y}");
+            }
+            
+
+
         }
 
         

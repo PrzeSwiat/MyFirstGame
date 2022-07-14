@@ -14,6 +14,7 @@ namespace MyFirstGame.Components
         public string Directory = "";
         public string Tag = "";
         public Image Strite = null;
+        public Vector2 hook;
 
         public Strite2D(Vector2 position, Vector2 scale, string directory, string tag)
         {
@@ -28,7 +29,11 @@ namespace MyFirstGame.Components
 
             //Logger.Info($"[Strite2D] {tag} registered successfully ");
             MainEngine.RegisterStrite(this);
+            hook = new Vector2((scale.X / 2), 0);
+
         }
+
+
 
         public void DestroyObj()
         {
